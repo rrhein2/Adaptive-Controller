@@ -16,6 +16,7 @@ struct digitalButton {
   bool lastState = HIGH;
   unsigned long stateChangeTime = 0;
   String name;
+  char btnIndx = 0;
 };
 
 struct analogButton {
@@ -23,6 +24,7 @@ struct analogButton {
   int lastState = 0;
   unsigned long stateChangeTime = 0;
   String name;
+  char btnIndx = '0';
 };
 
 digitalButton BUTTON_UP; 
@@ -61,6 +63,37 @@ void println(int comPort, String payload)
   }
 }
 
+void println(int comPort, char payload, bool useAtoI = true)
+{
+  if(comPort == 0)
+  {
+    if(useAtoI)
+    {
+      Serial.println((int)payload - '0');
+    }
+    else
+    {
+      Serial.println(payload);
+    }
+  }
+  else if(comPort == 1)
+  {
+    Serial1.println(payload);
+  }
+  else
+  {
+    if(useAtoI)
+    {
+      Serial.println((int)payload - '0');
+    }
+    else
+    {
+      Serial.println(payload);
+    }    
+    Serial1.println(payload);
+  }
+}
+
 void setup() {
   // put your setup code here, to run once:
 
@@ -69,13 +102,13 @@ void setup() {
   Serial1.begin(9600);
 
   // Initialize button variables
-  BUTTON_UP.pinNum = 2; BUTTON_UP.name = "UP";
-  BUTTON_RT.pinNum = 3; BUTTON_RT.name = "RIGHT";
-  BUTTON_DN.pinNum = 4; BUTTON_DN.name = "DOWN";
-  BUTTON_LT.pinNum = 5; BUTTON_LT.name = "LEFT";
-  BUTTON_E.pinNum = 6; BUTTON_E.name = "E";
-  BUTTON_F.pinNum = 7; BUTTON_F.name = "F";
-  BUTTON_K.pinNum = 8; BUTTON_K.name = "K";
+  BUTTON_UP.pinNum = 2; BUTTON_UP.name = "UP";    BUTTON_UP.btnIndx = '1';
+  BUTTON_RT.pinNum = 3; BUTTON_RT.name = "RIGHT"; BUTTON_RT.btnIndx = '2';
+  BUTTON_DN.pinNum = 4; BUTTON_DN.name = "DOWN";  BUTTON_DN.btnIndx = '3';
+  BUTTON_LT.pinNum = 5; BUTTON_LT.name = "LEFT";  BUTTON_LT.btnIndx = '4';
+  BUTTON_E.pinNum = 6; BUTTON_E.name = "E";       BUTTON_E.btnIndx = '5';
+  BUTTON_F.pinNum = 7; BUTTON_F.name = "F";       BUTTON_F.btnIndx = '6';
+  BUTTON_K.pinNum = 8; BUTTON_K.name = "K";       BUTTON_K.btnIndx = '7';
   ANLG_JOY_X_AXIS.pinNum = 0; ANLG_JOY_X_AXIS.name = "X-Axis";
   ANLG_JOY_Y_AXIS.pinNum = 1; ANLG_JOY_Y_AXIS.name = "Y-Axis";
 
@@ -107,8 +140,9 @@ void analogButtonState(analogButton &button, short debounceTime = 10)
   {
     button.lastState = position;
     button.stateChangeTime = currTime;
-    // Serial.println(button.name + ": " + position);
-    println(2, button.name + ": " + position);
+    Serial.println(button.name + ": " + position);
+    // println(2, button.name + ": " + position);
+    println(2, button.btnIndx);
   }
 }
 
@@ -122,15 +156,17 @@ void digitalButtonState(digitalButton &button, short debounceTime = 10)
     button.stateChangeTime = currTime;
     if(currState == PRESSED)
     {
-      // Serial.println(button.name + " button pressed");
+      Serial.println(button.name + " button pressed " + button.btnIndx);
       // Serial1.println(button.name + " button pressed");
-      println(2, button.name + " button pressed");
+      // println(2, button.name + " button pressed");
+      println(2, button.btnIndx);
     }
     else
     {
       // Serial.println(button.name + " button released");
       // Serial1.println(button.name + " button released");
-      println(2, button.name + " button released");
+      // println(2, button.name + " button released");
+      println(2, button.btnIndx);
     }
   }
 }
