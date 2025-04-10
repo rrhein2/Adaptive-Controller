@@ -1,0 +1,9 @@
+# When I switched to the ESP32-#3 series
+1. Got power but couldn't identify a port
+    - Turns out the USB-C needs to click in, and it takes a lot of force to do so. Make sure it's definitly in
+2. Permission error when writing (Port already in use)
+    - You can't have 2 IDE windows open and connected to the same ESP32. Make sure you only have 1 windows open
+3. No serial output
+    - Tools > USB CDC On Boot - set this to "Enabled"
+4. Joystick is only being properly detected in one direction. In the other direction, even the slightest shift sends it all the way to max value
+    - You are probably using 5v power into the joystick and it is overloading the analog pin (I don't think any of the ESP32 pins are rated for 5v in). Use a voltage splitter if the joystick needs 5v, otherwise use the 3.3v VCC instead
