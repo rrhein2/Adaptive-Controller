@@ -140,7 +140,8 @@ void analogButtonState(analogButton &button, short debounceTime = 10)
   {
     button.lastState = position;
     button.stateChangeTime = currTime;
-    Serial.println(button.name + ": " + position);
+    Serial.print(button.name + ": ");
+    Serial.println(position);
     // println(2, button.name + ": " + position);
     println(2, button.btnIndx);
   }
@@ -156,7 +157,7 @@ void digitalButtonState(digitalButton &button, short debounceTime = 10)
     button.stateChangeTime = currTime;
     if(currState == PRESSED)
     {
-      Serial.println(button.name + " button pressed " + button.btnIndx);
+      Serial.print(button.name + " button pressed " + button.btnIndx);
       // Serial1.println(button.name + " button pressed");
       // println(2, button.name + " button pressed");
       println(2, button.btnIndx);
